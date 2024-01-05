@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG:String = "PERMISOS_APP"
+
     lateinit var bluetoothManger: BluetoothManager
     lateinit var bluetoothAdapter: BluetoothAdapter
 
@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var receiver2 : Discoverability
     lateinit var btnOnOff: Button
     lateinit var btnDiscoverable:Button
+    lateinit var btnGetPairedDevices: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -45,6 +46,19 @@ class MainActivity : AppCompatActivity() {
         enableDisableBT()
         enableDisableBTDiscoverability()
 
+        btnGetPairedDevices.setOnClickListener {
+            getPairedDevices()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getPairedDevices() {
+        val arr = bluetoothAdapter.bondedDevices
+        Log.d(Utils::TAG.toString(), "The list of bonded devices is ${arr.size.toString()}: ${arr.toString()}")
+
+        for(device in arr){
+            Log.d(Utils::TAG.toString(), "Device name: ${device.name}, address:  ${device.address}, type: ${device.type.toString()}, uuids: ${device.uuids.toString()}")
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -77,6 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun initUI() {
         btnDiscoverable = findViewById(R.id.btnDiscoverability)
         btnOnOff = findViewById(R.id.btnOnOf)
+        btnGetPairedDevices = findViewById(R.id.btnGetPairedDevices)
     }
 
     @SuppressLint("MissingPermission")
